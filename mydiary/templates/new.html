@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% load crispy_forms_tags %}
+    
+    <div class="container">
+        <form method="POST" enctype='multipart/form-data'>
+            {% csrf_token %}
+            <table>
+            {{ form|crispy }}  
+            </table>
+            <input class="btn btn-dark" type="submit" value="완료" >
+        </form>
+    </div>
+
+{% endblock %}
