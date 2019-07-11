@@ -5,18 +5,31 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.contrib import auth
 from .models import Blog 
 from .forms import BlogForm
 
+@login_required(login_url='login/')
 def index(request):
-    blogs = Blog.objects.all()
+    # blogs = Blog.objects.filter(title=request.GET.get('q'))
     # if(blog.writer == "")
     #     blog.writer = null
-    blog_list = Blog.objects.all()
+    blogs = Blog.objects.filter(writer__contains=request.user.username)
+    
+    # 검색 기능 구현
+    if request.GET.get('q'):
+        variable_column = request.GET.get('fd_name')
+        search_type = 'contains'
+        filter = variable_column + '__' + search_type
+        search_blogs = Blog.objects.filter(writer__contains=request.user.username).filter(**{ filter: request.GET.get('q') })
+        blog_list = search_blogs
+    else :
+        blog_list = blogs
+
     paginator = Paginator(blog_list, 3)
     page = request.GET.get('page')
-    
+
     try: 
         posts = paginator.get_page(page)
     except PageNotAnInteger:

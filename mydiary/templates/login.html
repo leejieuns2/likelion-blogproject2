@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load socialaccount %}
+{% load staticfiles %}
+{% providers_media_js %}
 <div class="container">
         <form method="POST" action="">
                 {% csrf_token %}
@@ -13,8 +16,17 @@
                         <label for="body">Password :</label>
                         <input type="password" class="form-control" name="password">
                 </div>
-                               
+
+                <center>
+                <img src="{% static 'google.jpg' %}" width="50" height="50" alt="google" > &nbsp;
+                <a href="{% provider_login_url 'google' %}"> 
+                        <button type="button" class="btn btn-light">구글 아이디로 로그인하기</button>
+                </a>
+                </center>
+                <br><hr>      
                 <input class="btn btn-block" type="submit" value="Login">
         </form> 
+        <br>
 </div>
+
 {% endblock %}
